@@ -1,0 +1,33 @@
+import {
+  PanelTop,
+  Menu,
+  LayoutList,
+  Image,
+  FolderOpen,
+  Wrench,
+  Factory,
+  Info,
+  Phone,
+  FileText,
+  LayoutDashboard,
+  Package,
+  CreditCard,
+  HelpCircle,
+} from 'lucide-react'
+
+export const MODULE_ICONS = {
+  topbar: PanelTop,
+  navbar: Menu,
+  navLinks: LayoutList,
+  heroSlides: Image,
+  categories: FolderOpen,
+  capabilities: Wrench,
+  industries: Factory,
+  about: Info,
+  contact: Phone,
+  faq: HelpCircle,
+  creditApplication: CreditCard,
+  footer: FileText,
+  products: Package,
+  dashboard: LayoutDashboard,
+}
