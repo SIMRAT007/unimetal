@@ -30,14 +30,13 @@ import Offline from './components/Offline'
 
 const EnvError = () => (
   <div className="env-error">
-    <h1>Configuration missing</h1>
-    <p>Firebase environment variables are not set.</p>
-    <p>Copy .env.example to .env locally, or add them in the Vercel dashboard, then refresh.</p>
+    <h1>Something went wrong</h1>
+    <p>Please refresh the page to try again.</p>
     <button onClick={() => window.location.reload()} className="env-error-refresh">Refresh</button>
   </div>
 )
 
-const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
+const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'unimetal@gmail.com'
 
 const ProtectedAdmin = ({ children }) => {
   const { user, loading } = useAuth()
