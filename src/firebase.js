@@ -28,5 +28,7 @@ if (missing.length) {
   }
 }
 
+export const envMissing = missing.length > 0
+
 export { app, db, auth }
 export { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy, limit, writeBatch, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged }

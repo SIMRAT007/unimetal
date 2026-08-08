@@ -3823,6 +3823,64 @@ th {
   font-weight: 700;
 }
 
+.initial-loader-refresh {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.initial-loader-refresh p {
+  margin-bottom: 0.75rem;
+}
+
+.initial-loader-refresh button {
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.env-error {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  z-index: 10001;
+}
+
+.env-error h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.env-error p {
+  max-width: 520px;
+  margin: 0.25rem 0;
+  color: var(--text-muted);
+}
+
+.env-error-refresh {
+  margin-top: 1.5rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .page-loader {
   display: flex;
   flex-direction: column;

@@ -24,8 +24,18 @@ import FaqAdmin from './pages/Admin/FaqAdmin'
 import FooterAdmin from './pages/Admin/FooterAdmin'
 import Setup from './pages/Admin/Setup'
 import ScrollReveal from './components/ScrollReveal'
+import { envMissing } from './firebase.js'
 import InitialLoader from './components/InitialLoader'
 import Offline from './components/Offline'
+
+const EnvError = () => (
+  <div className="env-error">
+    <h1>Configuration missing</h1>
+    <p>Firebase environment variables are not set.</p>
+    <p>Copy .env.example to .env locally, or add them in the Vercel dashboard, then refresh.</p>
+    <button onClick={() => window.location.reload()} className="env-error-refresh">Refresh</button>
+  </div>
+)
 
 const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
 
@@ -46,6 +56,8 @@ const ProtectedAdmin = ({ children }) => {
 }
 
 function App() {
+  if (envMissing) return <EnvError />
+
   return (
     <HelmetProvider>
       <AuthProvider>
