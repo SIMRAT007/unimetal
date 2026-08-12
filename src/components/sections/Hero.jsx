@@ -8,6 +8,8 @@ const Hero = () => {
   const { data: slides, loading } = useCollection(COLLECTIONS.heroSlides, { activeOnly: true })
   const { data: categories } = useCollection(COLLECTIONS.categories)
   const [current, setCurrent] = useState(0)
+  const [displayed, setDisplayed] = useState(0)
+  const [visible, setVisible] = useState(true)
   const [paused, setPaused] = useState(false)
 
   const activeSlides = slides.length ? slides : []
@@ -19,6 +21,16 @@ const Hero = () => {
     }, 6000)
     return () => clearInterval(timer)
   }, [activeSlides.length, paused])
+
+  useEffect(() => {
+    if (current === displayed) return
+    setVisible(false)
+    const timer = setTimeout(() => {
+      setDisplayed(current)
+      setVisible(true)
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [current, displayed])
 
   if (loading) return <div className="hero-skeleton" />
   if (activeSlides.length === 0) return null
@@ -36,31 +48,31 @@ const Hero = () => {
       ))}
 
       <div className="container hero-content">
-        <div className="hero-main">
+        <div className={`hero-main ${visible ? 'is-visible' : ''}`}>
           <div className="hero-text">
-            {activeSlides[current].tag && (
-              <span className="hero-tag">{activeSlides[current].tag}</span>
+            {activeSlides[displayed].tag && (
+              <span className="hero-tag">{activeSlides[displayed].tag}</span>
             )}
-            {activeSlides[current].heading && <h1>{activeSlides[current].heading}</h1>}
-            {activeSlides[current].headingLine2 && <h2>{activeSlides[current].headingLine2}</h2>}
-            {activeSlides[current].headingAccent && (
-              <span className="hero-accent">{activeSlides[current].headingAccent}</span>
+            {activeSlides[displayed].heading && <h1>{activeSlides[displayed].heading}</h1>}
+            {activeSlides[displayed].headingLine2 && <h2>{activeSlides[displayed].headingLine2}</h2>}
+            {activeSlides[displayed].headingAccent && (
+              <span className="hero-accent">{activeSlides[displayed].headingAccent}</span>
             )}
-            {activeSlides[current].subheading && (
-              <p className="hero-subheading">{activeSlides[current].subheading}</p>
+            {activeSlides[displayed].subheading && (
+              <p className="hero-subheading">{activeSlides[displayed].subheading}</p>
             )}
           </div>
 
           <div className="hero-actions">
-            {activeSlides[current].buttonText && activeSlides[current].buttonLink && (
-              <Link to={activeSlides[current].buttonLink} className="hero-btn hero-btn-primary">
+            {activeSlides[displayed].buttonText && activeSlides[displayed].buttonLink && (
+              <Link to={activeSlides[displayed].buttonLink} className="hero-btn hero-btn-primary">
                 <Clock size={16} />
-                {activeSlides[current].buttonText}
+                {activeSlides[displayed].buttonText}
               </Link>
             )}
-            {activeSlides[current].buttonText2 && activeSlides[current].buttonLink2 && (
-              <Link to={activeSlides[current].buttonLink2} className="hero-btn hero-btn-secondary">
-                {activeSlides[current].buttonText2}
+            {activeSlides[displayed].buttonText2 && activeSlides[displayed].buttonLink2 && (
+              <Link to={activeSlides[displayed].buttonLink2} className="hero-btn hero-btn-secondary">
+                {activeSlides[displayed].buttonText2}
               </Link>
             )}
           </div>

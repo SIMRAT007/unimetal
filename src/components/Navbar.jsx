@@ -4,6 +4,7 @@ import TopBar from './TopBar'
 import { COLLECTIONS } from '../config/collections'
 import { useSingleton, useCollection } from '../hooks/useCms'
 import { Menu, X } from 'lucide-react'
+import logo from '../assets/logo.png'
 
 const linkClass = ({ isActive }) => isActive ? 'active' : ''
 
@@ -53,15 +54,9 @@ const Navbar = () => {
       <TopBar />
       <nav className={`navbar ${mobileOpen ? 'menu-open' : ''}`}>
         <div className="container">
-          {(nav.logo || nav.logoText) && (
-            <NavLink to="/" className="logo">
-              {nav.logo ? (
-                <img src={nav.logo} alt={nav.logoText || ''} className="nav-logo-img" />
-              ) : (
-                nav.logoText
-              )}
-            </NavLink>
-          )}
+          <NavLink to="/" className="logo">
+            <img src={logo} alt={nav.logoText || ''} className="nav-logo-img" />
+          </NavLink>
 
           <div className={`nav-main ${mobileOpen ? 'open' : ''}`}>
             <ul className="nav-links">

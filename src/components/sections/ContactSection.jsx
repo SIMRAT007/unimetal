@@ -3,6 +3,7 @@ import { useSingleton } from '../../hooks/useCms'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 import ContactForm from '../ContactForm'
 import PageLoader from '../PageLoader'
+import logo from '../../assets/logo.png'
 
 const ContactSection = () => {
   const { data, loading } = useSingleton(COLLECTIONS.contact)
@@ -24,7 +25,7 @@ const ContactSection = () => {
         <div className="contact-grid">
           <div className="contact-card contact-info">
             <div className="contact-info-header">
-              {nav?.logo && <img src={nav.logo} alt={nav.logoText || ''} className="contact-info-logo" />}
+              <img src={logo} alt={nav?.logoText || ''} className="contact-info-logo" />
               {nav?.logoText && <h3>{nav.logoText}</h3>}
             </div>
             {data.infoText && (

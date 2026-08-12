@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { COLLECTIONS } from '../config/collections'
 import { useSingleton } from '../hooks/useCms'
 import { Facebook, Instagram, Linkedin, Twitter, Youtube, Globe } from 'lucide-react'
+import logo from '../assets/logo.png'
 
 const SOCIAL_ICONS = {
   facebook: Facebook,
@@ -21,18 +22,14 @@ const Footer = () => {
   const { data, loading } = useSingleton(COLLECTIONS.footer)
 
   if (loading) return null
-  if (!data.logo && !data.description && !data.columns?.length && !data.copyright) return null
+  if (!data.description && !data.columns?.length && !data.copyright) return null
 
   return (
     <footer className="site-footer">
       <div className="container">
         <div className="footer-grid">
           <div className="footer-col footer-brand">
-            {data.logo ? (
-              <img src={data.logo} alt={data.logoText || ''} className="footer-logo" />
-            ) : (
-              data.logoText && <h3 className="footer-logo-text">{data.logoText}</h3>
-            )}
+            <img src={logo} alt={data.logoText || ''} className="footer-logo" />
             {data.description && <p className="footer-desc">{data.description}</p>}
             {data.social?.length > 0 && (
               <div className="footer-social">
