@@ -29,7 +29,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-col footer-brand">
-            <img src={logo} alt={data.logoText || ''} className="footer-logo" />
+            <img src={data?.logo || logo} alt={data?.logoText || ''} className="footer-logo" />
             {data.description && <p className="footer-desc">{data.description}</p>}
             {data.social?.length > 0 && (
               <div className="footer-social">

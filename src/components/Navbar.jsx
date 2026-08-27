@@ -55,7 +55,7 @@ const Navbar = () => {
       <nav className={`navbar ${mobileOpen ? 'menu-open' : ''}`}>
         <div className="container">
           <NavLink to="/" className="logo">
-            <img src={logo} alt={nav.logoText || ''} className="nav-logo-img" />
+            <img src={nav?.logo || logo} alt={nav?.logoText || ''} className="nav-logo-img" />
           </NavLink>
 
           <div className={`nav-main ${mobileOpen ? 'open' : ''}`}>

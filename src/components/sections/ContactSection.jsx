@@ -25,7 +25,7 @@ const ContactSection = () => {
         <div className="contact-grid">
           <div className="contact-card contact-info">
             <div className="contact-info-header">
-              <img src={logo} alt={nav?.logoText || ''} className="contact-info-logo" />
+              <img src={nav?.logo || logo} alt={nav?.logoText || ''} className="contact-info-logo" />
               {nav?.logoText && <h3>{nav.logoText}</h3>}
             </div>
             {data.infoText && (
