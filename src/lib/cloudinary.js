@@ -2,8 +2,8 @@
 // Requires an UNSIGNED upload preset created in the Cloudinary dashboard:
 // Settings (gear icon) > Upload > Upload presets > Add upload preset > Signing Mode: Unsigned.
 
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || ''
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || ''
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'qoa8uzc8'
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'unimetal'
 
 export const cloudinaryConfigured = Boolean(CLOUD_NAME && UPLOAD_PRESET)
 
