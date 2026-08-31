@@ -5,7 +5,7 @@ import FieldRenderer from '../../components/admin/FieldRenderer'
 import Modal from '../../components/admin/Modal'
 import { CATEGORY_ICON_OPTIONS } from '../../config/categoryIcons'
 import { COLLECTIONS, defaultCategoriesSection } from '../../config/collections'
-import { Plus, Edit2, Trash2, Loader2, X, Package, FolderOpen, Eye } from 'lucide-react'
+import { Plus, Edit2, Trash2, Loader2, X, Package, FolderOpen, Eye, GripVertical } from 'lucide-react'
 
 const categoryFields = [
   { name: 'name', label: 'Name', type: 'text' },
@@ -75,6 +75,7 @@ const ProductsAdmin = () => {
   const [catModalOpen, setCatModalOpen] = useState(false)
   const [catEditing, setCatEditing] = useState(null)
   const [catForm, setCatForm] = useState(emptyCategory())
+  const [draggedId, setDraggedId] = useState(null)
 
   const [prodModalOpen, setProdModalOpen] = useState(false)
   const [prodEditing, setProdEditing] = useState(null)
@@ -185,6 +186,45 @@ const ProductsAdmin = () => {
     setShowProductsCategory(category)
   }
 
+  const reorderList = (list, fromId, toId) => {
+    const fromIndex = list.findIndex((i) => i.id === fromId)
+    const toIndex = list.findIndex((i) => i.id === toId)
+    if (fromIndex < 0 || toIndex < 0) return null
+    const moved = list[fromIndex]
+    const reordered = list.filter((_, i) => i !== fromIndex)
+    reordered.splice(toIndex, 0, moved)
+    return reordered.map((item, i) => ({ ...item, order: i + 1 }))
+  }
+
+  const handleReorderCategories = async (fromId, toId) => {
+    const list = [...categories].sort((a, b) => (a.order || 0) - (b.order || 0))
+    const reordered = reorderList(list, fromId, toId)
+    if (!reordered) return
+    setCategories(reordered)
+    try {
+      await Promise.all(reordered.map((c) => updateItem('categories', c.id, { order: c.order })))
+      setSaveMessage({ type: 'success', text: 'Category order saved' })
+    } catch (err) {
+      setSaveMessage({ type: 'error', text: err.message || 'Failed to save category order' })
+    }
+  }
+
+  const handleReorderProducts = async (fromId, toId) => {
+    const list = [...productsForCategory]
+    const reordered = reorderList(list, fromId, toId)
+    if (!reordered) return
+    setProducts((prev) => prev.map((p) => {
+      const next = reordered.find((r) => r.id === p.id)
+      return next ? { ...p, order: next.order } : p
+    }))
+    try {
+      await Promise.all(reordered.map((p) => updateItem('products', p.id, { order: p.order })))
+      setSaveMessage({ type: 'success', text: 'Product order saved' })
+    } catch (err) {
+      setSaveMessage({ type: 'error', text: err.message || 'Failed to save product order' })
+    }
+  }
+
   const sortedCategories = [...categories].sort((a, b) => (a.order || 0) - (b.order || 0))
 
   const productsForCategory = showProductsCategory
@@ -243,6 +283,7 @@ const ProductsAdmin = () => {
           <table className="admin-table">
             <thead>
               <tr>
+                <th className="drag-th" />
                 <th>S.No</th>
                 <th>Category Name</th>
                 <th>Total Products</th>
@@ -254,7 +295,21 @@ const ProductsAdmin = () => {
               {sortedCategories.map((c, index) => {
                 const count = products.filter((p) => p.categoryId === c.id).length
                 return (
-                  <tr key={c.id}>
+                  <tr
+                    key={c.id}
+                    draggable
+                    onDragStart={(e) => { e.dataTransfer.setData('text/plain', c.id); setDraggedId(c.id) }}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault()
+                      const fromId = e.dataTransfer.getData('text/plain')
+                      if (fromId && fromId !== c.id) handleReorderCategories(fromId, c.id)
+                      setDraggedId(null)
+                    }}
+                    onDragEnd={() => setDraggedId(null)}
+                    style={{ opacity: draggedId === c.id ? 0.5 : 1 }}
+                  >
+                    <td className="drag-handle" style={{ cursor: 'grab' }}><GripVertical size={18} /></td>
                     <td>{index + 1}</td>
                     <td>{c.name}</td>
                     <td>{count}</td>
@@ -274,7 +329,7 @@ const ProductsAdmin = () => {
               })}
               {sortedCategories.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="empty-cell">No categories yet. Click Add Category to create one.</td>
+                  <td colSpan="6" className="empty-cell">No categories yet. Click Add Category to create one.</td>
                 </tr>
               )}
             </tbody>
@@ -296,6 +351,7 @@ const ProductsAdmin = () => {
           <table className="admin-table">
             <thead>
               <tr>
+                <th className="drag-th" />
                 <th>S.No</th>
                 <th>Product Name</th>
                 <th>Actions</th>
@@ -303,7 +359,21 @@ const ProductsAdmin = () => {
             </thead>
             <tbody>
               {productsForCategory.map((p, index) => (
-                <tr key={p.id}>
+                <tr
+                  key={p.id}
+                  draggable
+                  onDragStart={(e) => { e.dataTransfer.setData('text/plain', p.id); setDraggedId(p.id) }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    const fromId = e.dataTransfer.getData('text/plain')
+                    if (fromId && fromId !== p.id) handleReorderProducts(fromId, p.id)
+                    setDraggedId(null)
+                  }}
+                  onDragEnd={() => setDraggedId(null)}
+                  style={{ opacity: draggedId === p.id ? 0.5 : 1 }}
+                >
+                  <td className="drag-handle" style={{ cursor: 'grab' }}><GripVertical size={18} /></td>
                   <td>{index + 1}</td>
                   <td>{p.name}</td>
                   <td>
@@ -316,7 +386,7 @@ const ProductsAdmin = () => {
               ))}
               {productsForCategory.length === 0 && (
                 <tr>
-                  <td colSpan="3" className="empty-cell">No products in this category yet.</td>
+                  <td colSpan="4" className="empty-cell">No products in this category yet.</td>
                 </tr>
               )}
             </tbody>

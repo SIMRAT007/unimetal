@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Image, Plus, Edit2, Trash2, Loader2, X } from 'lucide-react'
+import { Image, Plus, Edit2, Trash2, Loader2, X, GripVertical } from 'lucide-react'
 import { getCollection, addItem, updateItem, deleteItem } from '../../lib/cms'
 import FieldRenderer from '../../components/admin/FieldRenderer'
 import Modal from '../../components/admin/Modal'
@@ -29,6 +29,7 @@ const HeroSlidesAdmin = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(emptySlide())
+  const [draggedId, setDraggedId] = useState(null)
 
   useEffect(() => {
     if (!saveMessage) return
@@ -73,6 +74,29 @@ const HeroSlidesAdmin = () => {
     await load()
   }
 
+  const reorderList = (list, fromId, toId) => {
+    const fromIndex = list.findIndex((i) => i.id === fromId)
+    const toIndex = list.findIndex((i) => i.id === toId)
+    if (fromIndex < 0 || toIndex < 0) return null
+    const moved = list[fromIndex]
+    const reordered = list.filter((_, i) => i !== fromIndex)
+    reordered.splice(toIndex, 0, moved)
+    return reordered.map((item, i) => ({ ...item, order: i + 1 }))
+  }
+
+  const handleReorder = async (fromId, toId) => {
+    const list = [...items].sort((a, b) => (a.order || 0) - (b.order || 0))
+    const reordered = reorderList(list, fromId, toId)
+    if (!reordered) return
+    setItems(reordered)
+    try {
+      await Promise.all(reordered.map((item) => updateItem('heroSlides', item.id, { order: item.order })))
+      setSaveMessage({ type: 'success', text: 'Slide order saved' })
+    } catch (err) {
+      setSaveMessage({ type: 'error', text: err.message || 'Failed to save slide order' })
+    }
+  }
+
   const sortedItems = [...items].sort((a, b) => (a.order || 0) - (b.order || 0))
 
   if (loading) return <div className="admin-loading"><Loader2 size={20} className="spin" /> Loading…</div>
@@ -102,6 +126,7 @@ const HeroSlidesAdmin = () => {
           <table className="admin-table">
             <thead>
               <tr>
+                <th className="drag-th" />
                 <th>S.No</th>
                 <th>Heading</th>
                 <th>Button</th>
@@ -110,7 +135,21 @@ const HeroSlidesAdmin = () => {
             </thead>
             <tbody>
               {sortedItems.map((item, index) => (
-                <tr key={item.id}>
+                <tr
+                  key={item.id}
+                  draggable
+                  onDragStart={(e) => { e.dataTransfer.setData('text/plain', item.id); setDraggedId(item.id) }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    const fromId = e.dataTransfer.getData('text/plain')
+                    if (fromId && fromId !== item.id) handleReorder(fromId, item.id)
+                    setDraggedId(null)
+                  }}
+                  onDragEnd={() => setDraggedId(null)}
+                  style={{ opacity: draggedId === item.id ? 0.5 : 1 }}
+                >
+                  <td className="drag-handle" style={{ cursor: 'grab' }}><GripVertical size={18} /></td>
                   <td>{index + 1}</td>
                   <td>{item.heading}</td>
                   <td>{item.buttonText}</td>
@@ -124,7 +163,7 @@ const HeroSlidesAdmin = () => {
               ))}
               {sortedItems.length === 0 && (
                 <tr>
-                  <td colSpan="4" className="empty-cell">No slides yet. Click Add Slide to create one.</td>
+                  <td colSpan="5" className="empty-cell">No slides yet. Click Add Slide to create one.</td>
                 </tr>
               )}
             </tbody>
