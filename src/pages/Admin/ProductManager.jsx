@@ -119,7 +119,7 @@ const ProductManager = () => {
           <input name="category" value={form.category} onChange={handleChange} placeholder="e.g. Steel, Aluminum" />
         </div>
         <div className="form-group">
-          <label>Price (₹)</label>
+          <label>Price</label>
           <input name="price" type="number" value={form.price} onChange={handleChange} required />
         </div>
         <div className="form-group">
@@ -166,7 +166,7 @@ const ProductManager = () => {
                 <tr key={product.id}>
                   <td>{product.name}</td>
                   <td>{product.category || '-'}</td>
-                  <td>₹{product.price}</td>
+                  <td>{product.price}</td>
                   <td>
                     <div className="actions">
                       <button className="btn btn-primary" onClick={() => editProduct(product)}>Edit</button>

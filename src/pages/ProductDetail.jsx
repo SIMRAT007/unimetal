@@ -135,8 +135,8 @@ const ProductDetail = () => {
               <div className="product-info-meta">
                 {hasPrice && (
                   <div className="product-info-price">
-                    <span className="product-info-current-price">£{product.price}</span>
-                    {hasOriginalPrice && <span className="product-info-original-price">£{product.originalPrice}</span>}
+                    <span className="product-info-current-price">{product.price}</span>
+                    {hasOriginalPrice && <span className="product-info-original-price">{product.originalPrice}</span>}
                     {hasDiscount && <span className="product-info-discount">{discountPercent}% off</span>}
                   </div>
                 )}

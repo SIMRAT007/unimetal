@@ -25,8 +25,8 @@ const ProductCard = ({ product }) => {
             View
           </span>
           <div className="product-price-wrap">
-            <span className="product-price">£{product.price}</span>
-            {hasDiscount && <span className="product-original-price">£{product.originalPrice}</span>}
+            <span className="product-price">{product.price}</span>
+            {hasDiscount && <span className="product-original-price">{product.originalPrice}</span>}
           </div>
         </div>
       </div>
