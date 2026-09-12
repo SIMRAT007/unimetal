@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { COLLECTIONS } from '../../config/collections'
-import { useCollection } from '../../hooks/useCms'
+import { useCollection, useSingleton } from '../../hooks/useCms'
 import { Link } from 'react-router-dom'
 import { Clock } from 'lucide-react'
+import logo from '../../assets/logo.png'
 
 const Hero = () => {
   const { data: slides, loading } = useCollection(COLLECTIONS.heroSlides, { activeOnly: true })
   const { data: categories } = useCollection(COLLECTIONS.categories)
+  const { data: nav } = useSingleton(COLLECTIONS.navbar)
   const [current, setCurrent] = useState(0)
   const [displayed, setDisplayed] = useState(0)
   const [visible, setVisible] = useState(true)
@@ -49,6 +51,10 @@ const Hero = () => {
 
       <div className="container hero-content">
         <div className={`hero-main ${visible ? 'is-visible' : ''}`}>
+          <div className="hero-brand">
+            <img src={nav?.logo || logo} alt={nav?.logoText || ''} className="hero-logo" />
+          </div>
+
           <div className="hero-text">
             {activeSlides[displayed].tag && (
               <span className="hero-tag">{activeSlides[displayed].tag}</span>
