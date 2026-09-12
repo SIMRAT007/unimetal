@@ -4,22 +4,56 @@ import { getCollection, addItem, updateItem, deleteItem } from '../../lib/cms'
 import FieldRenderer from '../../components/admin/FieldRenderer'
 import Modal from '../../components/admin/Modal'
 
+const iconRepeaterFields = [
+  { name: 'icon', label: 'Icon', type: 'image', folder: 'hero' },
+  { name: 'line1', label: 'Label Line 1', type: 'text' },
+  { name: 'line2', label: 'Label Line 2', type: 'text' },
+]
+
 const slideFields = [
-  { name: 'image', label: 'Image', type: 'image', folder: 'hero' },
-  { name: 'tag', label: 'Tag / Label', type: 'text' },
-  { name: 'heading', label: 'Heading Line 1', type: 'text' },
-  { name: 'headingLine2', label: 'Heading Line 2', type: 'text' },
-  { name: 'headingAccent', label: 'Heading Accent (e.g. 24/7)', type: 'text' },
-  { name: 'subheading', label: 'Subheading', type: 'textarea' },
-  { name: 'buttonText', label: 'Primary Button Text', type: 'text' },
+  { name: 'image', label: 'Top Band Background Image', type: 'image', folder: 'hero' },
+  { name: 'textureImage', label: 'Lower Background Texture', type: 'image', folder: 'hero' },
+  { name: 'logo', label: 'Logo (white card)', type: 'image', folder: 'hero' },
+  { name: 'heading', label: 'Title (e.g. STRUT CHANNELS)', type: 'text' },
+  { name: 'variants', label: 'Variants Line (e.g. PREGAVL | HDG | MAGNELIS | SS)', type: 'text' },
+  { name: 'spec', label: 'Spec Line (e.g. 1.5 - 2.5mm)', type: 'text' },
+  { name: 'subheading', label: 'Subheading Text', type: 'textarea' },
+  { name: 'productImage', label: 'Product Image', type: 'image', folder: 'hero' },
+  { name: 'features', label: 'Feature', type: 'repeater', repeaterFields: iconRepeaterFields },
+  { name: 'applications', label: 'Application', type: 'repeater', repeaterFields: iconRepeaterFields },
+  { name: 'tagline', label: 'Tagline (one line per row)', type: 'textarea' },
+  { name: 'finishes', label: 'Finish', type: 'repeater', repeaterFields: [
+    { name: 'image', label: 'Swatch Image', type: 'image', folder: 'hero' },
+    { name: 'label', label: 'Label', type: 'text' },
+  ] },
+  { name: 'buttonText', label: 'Primary Button Text (optional)', type: 'text' },
   { name: 'buttonLink', label: 'Primary Button Link', type: 'text' },
-  { name: 'buttonText2', label: 'Secondary Button Text', type: 'text' },
+  { name: 'buttonText2', label: 'Secondary Button Text (optional)', type: 'text' },
   { name: 'buttonLink2', label: 'Secondary Button Link', type: 'text' },
   { name: 'order', label: 'Order', type: 'number' },
   { name: 'active', label: 'Active', type: 'boolean' },
 ]
 
-const emptySlide = () => ({ image: '', tag: '', heading: '', headingLine2: '', headingAccent: '', subheading: '', buttonText: '', buttonLink: '', buttonText2: '', buttonLink2: '', order: 0, active: true })
+const emptySlide = () => ({
+  image: '',
+  textureImage: '',
+  logo: '',
+  heading: '',
+  variants: '',
+  spec: '',
+  subheading: '',
+  productImage: '',
+  features: [],
+  applications: [],
+  tagline: '',
+  finishes: [],
+  buttonText: '',
+  buttonLink: '',
+  buttonText2: '',
+  buttonLink2: '',
+  order: 0,
+  active: true,
+})
 
 const HeroSlidesAdmin = () => {
   const [items, setItems] = useState([])
@@ -66,7 +100,7 @@ const HeroSlidesAdmin = () => {
     }
   }
 
-  const editItem = (item) => { setEditing(item.id); setForm({ ...item }); setModalOpen(true) }
+  const editItem = (item) => { setEditing(item.id); setForm({ ...emptySlide(), ...item }); setModalOpen(true) }
   const newItem = () => { setEditing(null); setForm(emptySlide()); setModalOpen(true) }
   const deleteItemHandler = async (id) => {
     if (!confirm('Delete this slide?')) return
