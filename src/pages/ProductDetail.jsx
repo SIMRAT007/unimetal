@@ -7,11 +7,13 @@ import { sanitizeDescription } from '../lib/sanitizeHtml'
 import PageLoader from '../components/PageLoader'
 import ProductsCta from '../components/sections/ProductsCta'
 import DeliveryInfo from '../components/sections/DeliveryInfo'
+import { productPath, useDuplicateSlugs } from '../lib/productLinks'
 
 const ProductDetail = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
+  const duplicateSlugs = useDuplicateSlugs()
   const [product, setProduct] = useState(null)
   const [category, setCategory] = useState(null)
   const [related, setRelated] = useState([])
@@ -29,7 +31,8 @@ const ProductDetail = () => {
     let mounted = true
     const load = async () => {
       try {
-        const prod = await getDocBySlug('products', slug)
+        // Links use the slug, or the document id when the slug is missing or shared
+        const prod = (await getDocBySlug('products', slug)) || (await getDocById('products', slug))
         if (!prod) {
           if (mounted) setError('Product not found.')
         } else if (mounted) {
@@ -195,10 +198,10 @@ const ProductDetail = () => {
               <h2 style={{ paddingBottom: '2rem' }}>More in {category?.name}</h2>
               <div className="product-grid small">
                 {related.map((p) => (
-                  <a href={`/product/${p.slug || p.id}`} key={p.id} className="product-card">
+                  <Link to={productPath(p, duplicateSlugs)} key={p.id} className="product-card">
                     {p.images?.[0] && <img src={p.images[0]} alt={p.name} className="product-image" />}
                     <h3 style={{ padding: '1rem' }}>{p.name}</h3>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

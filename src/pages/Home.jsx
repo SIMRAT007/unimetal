@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import Hero from '../components/sections/Hero'
 import CategoriesSection from '../components/sections/CategoriesSection'
-import IndustriesSection from '../components/sections/IndustriesSection'
 import CapabilitiesSection from '../components/sections/CapabilitiesSection'
 import AboutSection from '../components/sections/AboutSection'
 import FaqSection from '../components/sections/FaqSection'
@@ -17,9 +16,8 @@ const Home = () => (
 
     <Hero />
     <AboutSection />
-    <CategoriesSection />
     <CapabilitiesSection />
-    <IndustriesSection />
+    <CategoriesSection />
     <FaqSection />
     <ContactSection />
     <CreditApplicationSection />

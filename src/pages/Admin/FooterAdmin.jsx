@@ -13,7 +13,7 @@ const mainFields = [
 
 const socialFields = [
   { name: 'platform', label: 'Platform', type: 'text' },
-  { name: 'url', label: 'URL', type: 'url' },
+  { name: 'url', label: 'URL', type: 'text', placeholder: 'e.g. /contact, /#about, https://…, mailto:…, tel:…' },
 ]
 
 const columnFields = [
@@ -22,7 +22,7 @@ const columnFields = [
 
 const linkFields = [
   { name: 'label', label: 'Label', type: 'text' },
-  { name: 'url', label: 'URL', type: 'url' },
+  { name: 'url', label: 'URL', type: 'text', placeholder: 'e.g. /contact, /#about, https://…, mailto:…, tel:…' },
 ]
 
 const emptySocial = () => ({ platform: '', url: '' })

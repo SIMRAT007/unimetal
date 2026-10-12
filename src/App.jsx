@@ -8,14 +8,13 @@ import Home from './pages/Home'
 import CategoryPage from './pages/CategoryPage'
 import ProductDetail from './pages/ProductDetail'
 import Products from './pages/Products'
-import IndustryPage from './pages/IndustryPage'
 import CapabilityPage from './pages/CapabilityPage'
+import DataCenterPage from './pages/DataCenterPage'
 import ContactPage from './pages/ContactPage'
 import AdminLogin from './pages/Admin/AdminLogin'
 import AdminDashboard from './pages/Admin/AdminDashboard'
 import AdminLayout from './components/admin/AdminLayout'
 import AdminModule from './pages/Admin/AdminModule'
-import IndustriesAdmin from './pages/Admin/IndustriesAdmin'
 import CapabilitiesAdmin from './pages/Admin/CapabilitiesAdmin'
 import ProductsAdmin from './pages/Admin/ProductsAdmin'
 import HeroSlidesAdmin from './pages/Admin/HeroSlidesAdmin'
@@ -67,8 +66,8 @@ function App() {
               <Route path="/products" element={<Layout><Products /></Layout>} />
               <Route path="/category/:slug" element={<Layout><CategoryPage /></Layout>} />
               <Route path="/product/:slug" element={<Layout><ProductDetail /></Layout>} />
-              <Route path="/industries/:slug" element={<Layout><IndustryPage /></Layout>} />
               <Route path="/capabilities/:slug" element={<Layout><CapabilityPage /></Layout>} />
+              <Route path="/data-center" element={<Layout><DataCenterPage /></Layout>} />
               <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
 
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -78,7 +77,6 @@ function App() {
                 element={<ProtectedAdmin><AdminLayout /></ProtectedAdmin>}
               >
                 <Route index element={<AdminDashboard />} />
-                <Route path="industries" element={<IndustriesAdmin />} />
                 <Route path="capabilities" element={<CapabilitiesAdmin />} />
                 <Route path="products" element={<ProductsAdmin />} />
                 <Route path="heroSlides" element={<HeroSlidesAdmin />} />

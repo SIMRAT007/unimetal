@@ -12,7 +12,8 @@ const ScrollReveal = () => {
           }
         })
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      // threshold 0: very tall sections (e.g. full product grid) can never reach a ratio like 0.1
+      { threshold: 0, rootMargin: '0px 0px -50px 0px' }
     )
 
     const initReveal = (el) => {

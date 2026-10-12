@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import TopBar from './TopBar'
 import { COLLECTIONS } from '../config/collections'
+import { DATA_CENTER_PATH } from '../config/dataCenter'
 import { useSingleton, useCollection } from '../hooks/useCms'
 import { Menu, X } from 'lucide-react'
 import logo from '../assets/logo.png'
@@ -11,6 +12,14 @@ const linkClass = ({ isActive }) => isActive ? 'active' : ''
 const SECTION_ALIASES = {
   products: 'categories',
 }
+
+// The CMS "Capabilities" scroll link is shown as the Data Center page instead
+const DATA_CENTER_LINK = { label: 'Data Center', linkType: 'page', target: DATA_CENTER_PATH }
+const overrideLink = (link) =>
+  link.target?.toLowerCase().replace(/^#/, '') === 'capabilities' ? { ...link, ...DATA_CENTER_LINK } : link
+
+// The Industries section was removed from the site; hide any CMS link still pointing at it
+const isRemovedLink = (link) => /industr/i.test(link.target || '')
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -47,7 +56,8 @@ const Navbar = () => {
 
   if (navLoading || linksLoading) return null
 
-  const activeLinks = links.filter((l) => l.active !== false).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  const activeLinks = links.filter((l) => l.active !== false && !isRemovedLink(l)).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map(overrideLink)
 
   return (
     <>

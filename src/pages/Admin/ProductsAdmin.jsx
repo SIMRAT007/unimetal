@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getCollection, addItem, updateItem, deleteItem, getSingleton, saveSingleton } from '../../lib/cms'
 import { makeSlug } from '../../lib/utils'
+import { uniqueSlug } from '../../lib/productLinks'
 import FieldRenderer from '../../components/admin/FieldRenderer'
 import Modal from '../../components/admin/Modal'
 import { CATEGORY_ICON_OPTIONS } from '../../config/categoryIcons'
@@ -148,7 +149,8 @@ const ProductsAdmin = () => {
     setSaving(true)
     try {
       const data = { ...prodForm }
-      if (!data.slug && data.name) data.slug = makeSlug(data.name)
+      // Keep product URLs clean and unique so no two products share a page
+      if (data.slug || data.name) data.slug = uniqueSlug(data.slug || data.name, products, prodEditing)
       if (prodEditing) await updateItem('products', prodEditing, data)
       else await addItem('products', data)
       setProdModalOpen(false)

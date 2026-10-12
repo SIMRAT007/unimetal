@@ -18,11 +18,41 @@ const SocialIcon = ({ platform }) => {
   return <Icon size={20} />
 }
 
+// Where common footer links go when no URL has been set in the admin panel
+const DEFAULT_LINKS = {
+  about: '/#about',
+  'about us': '/#about',
+  contact: '/contact',
+  'contact us': '/contact',
+  products: '/products',
+  'data center': '/data-center',
+  'data centers': '/data-center',
+  'data centre': '/data-center',
+  'data centres': '/data-center',
+  faq: '/#faq',
+  'delivery information': '/products#delivery',
+  delivery: '/products#delivery',
+  'credit application': '/contact#credit-application',
+}
+
+const resolveUrl = (link) => {
+  const url = (link.url || '').trim()
+  if (url) return url.startsWith('tel:') ? url.replace(/\s+/g, '') : url
+  return DEFAULT_LINKS[(link.label || '').trim().toLowerCase()] || ''
+}
+
+// Links without a destination (and links to the removed Industries section) are hidden
+const footerLinks = (links = []) => links
+  .map((link) => ({ ...link, url: resolveUrl(link) }))
+  .filter((link) => link.url && !/industr/i.test(link.url))
+
 const Footer = () => {
   const { data, loading } = useSingleton(COLLECTIONS.footer)
 
   if (loading) return null
   if (!data.description && !data.columns?.length && !data.copyright) return null
+
+  const socialLinks = (data.social || []).filter((s) => s.url?.trim())
 
   return (
     <footer className="site-footer">
@@ -31,9 +61,9 @@ const Footer = () => {
           <div className="footer-col footer-brand">
             <img src={data?.logo || logo} alt={data?.logoText || ''} className="footer-logo" />
             {data.description && <p className="footer-desc">{data.description}</p>}
-            {data.social?.length > 0 && (
+            {socialLinks.length > 0 && (
               <div className="footer-social">
-                {data.social.map((s, i) => (
+                {socialLinks.map((s, i) => (
                   <a
                     key={i}
                     href={s.url}
@@ -53,12 +83,14 @@ const Footer = () => {
             <div key={i} className="footer-col">
               <h4>{col.title}</h4>
               <ul>
-                {col.links?.map((link, j) => (
+                {footerLinks(col.links).map((link, j) => (
                   <li key={j}>
-                    {link.url?.startsWith('http') ? (
+                    {link.url.startsWith('http') ? (
                       <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+                    ) : link.url.startsWith('/') ? (
+                      <Link to={link.url}>{link.label}</Link>
                     ) : (
-                      <Link to={link.url || '#'}>{link.label}</Link>
+                      <a href={link.url}>{link.label}</a>
                     )}
                   </li>
                 ))}

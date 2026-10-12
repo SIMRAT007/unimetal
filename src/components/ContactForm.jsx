@@ -12,7 +12,7 @@ const ContactForm = ({ source = 'contact-page', defaultValues = {}, onSubmitted,
     phone: defaultValues.phone || '',
     inquiryType: defaultValues.inquiryType || 'General Inquiry',
     productId: defaultValues.productId || product?.id || '',
-    subject: defaultValues.subject || product?.name ? `Enquiry about ${product.name}` : '',
+    subject: defaultValues.subject || (product?.name ? `Enquiry about ${product.name}` : ''),
     message: defaultValues.message || '',
   })
   const [submitting, setSubmitting] = useState(false)

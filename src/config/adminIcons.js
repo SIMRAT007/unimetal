@@ -5,7 +5,6 @@ import {
   Image,
   FolderOpen,
   Wrench,
-  Factory,
   Info,
   Phone,
   FileText,
@@ -13,6 +12,7 @@ import {
   Package,
   CreditCard,
   HelpCircle,
+  Server,
 } from 'lucide-react'
 
 export const MODULE_ICONS = {
@@ -22,7 +22,7 @@ export const MODULE_ICONS = {
   heroSlides: Image,
   categories: FolderOpen,
   capabilities: Wrench,
-  industries: Factory,
+  dataCenter: Server,
   about: Info,
   contact: Phone,
   faq: HelpCircle,

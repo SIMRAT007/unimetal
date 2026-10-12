@@ -9,15 +9,16 @@ import {
   defaultFooter,
 } from './collections'
 import { CATEGORY_ICON_OPTIONS } from './categoryIcons'
+import { defaultDataCenter } from './dataCenter'
 
 const socialFields = [
   { name: 'platform', label: 'Platform', type: 'text' },
-  { name: 'url', label: 'URL', type: 'url' },
+  { name: 'url', label: 'URL', type: 'text', placeholder: 'e.g. /contact, /#about, https://…, mailto:…, tel:…' },
 ]
 
 const linkFields = [
   { name: 'label', label: 'Label', type: 'text' },
-  { name: 'url', label: 'URL', type: 'url' },
+  { name: 'url', label: 'URL', type: 'text', placeholder: 'e.g. /contact, /#about, https://…, mailto:…, tel:…' },
 ]
 
 export const ADMIN_MODULES = {
@@ -56,7 +57,7 @@ export const ADMIN_MODULES = {
         { value: 'scroll', label: 'Scroll to Section' },
         { value: 'page', label: 'Open Page' },
       ]},
-      { name: 'target', label: 'Target (section ID or URL)', type: 'text', placeholder: 'e.g. about, products, industries, capabilities, faq, contact' },
+      { name: 'target', label: 'Target (section ID or URL)', type: 'text', placeholder: 'e.g. about, products, capabilities, faq, contact' },
       { name: 'order', label: 'Order', type: 'number' },
       { name: 'active', label: 'Active', type: 'boolean' },
     ],
@@ -92,24 +93,84 @@ export const ADMIN_MODULES = {
       { name: 'active', label: 'Active', type: 'boolean' },
     ],
   },
-  industries: {
-    label: 'Industry Items',
-    type: 'collection',
-    path: COLLECTIONS.industries,
-    defaults: { name: '', slug: '', order: 0, active: true, icon: '', logo: '', subheading: '', heading: '', description: '', image: '', usageContent: '', moreAboutContent: '' },
+  dataCenter: {
+    label: 'Data Center',
+    type: 'singleton',
+    path: COLLECTIONS.dataCenter,
+    defaults: defaultDataCenter,
     fields: [
-      { name: 'name', label: 'Name', type: 'text' },
-      { name: 'slug', label: 'Slug', type: 'text' },
-      { name: 'icon', label: 'Homepage Icon', type: 'image', folder: 'industries' },
-      { name: 'logo', label: 'Page Logo', type: 'image', folder: 'industries' },
-      { name: 'subheading', label: 'Subheading', type: 'text' },
-      { name: 'heading', label: 'Heading', type: 'text' },
-      { name: 'description', label: 'Description', type: 'richText' },
-      { name: 'image', label: 'Image', type: 'image', folder: 'industries' },
-      { name: 'usageContent', label: 'How they use it', type: 'richText' },
-      { name: 'moreAboutContent', label: 'More about them', type: 'richText' },
-      { name: 'order', label: 'Order', type: 'number' },
-      { name: 'active', label: 'Active', type: 'boolean' },
+      { name: 'secSeo', label: 'SEO', type: 'section' },
+      { name: 'seoTitle', label: 'Page Title', type: 'text' },
+      { name: 'seoDescription', label: 'Meta Description', type: 'textarea' },
+
+      { name: 'secHero', label: 'Hero', type: 'section' },
+      { name: 'heroImage', label: 'Banner Image (also used on the home page)', type: 'image', folder: 'dataCenter' },
+      { name: 'heroEyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'heroTitle', label: 'Heading (new line = line break)', type: 'textarea' },
+      { name: 'heroText', label: 'Text', type: 'textarea' },
+      { name: 'heroPrimaryText', label: 'Primary Button Text', type: 'text' },
+      { name: 'heroPrimaryLink', label: 'Primary Button Link', type: 'text' },
+      { name: 'heroSecondaryText', label: 'Secondary Button Text (scrolls to Applications)', type: 'text' },
+
+      { name: 'secStrip', label: 'Black Strip (also the points on the home page)', type: 'section' },
+      { name: 'stripItems', label: 'Strip Item', type: 'repeater', repeaterFields: [{ name: 'text', label: 'Text', type: 'text' }] },
+
+      { name: 'secApps', label: 'Applications', type: 'section' },
+      { name: 'appsEyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'appsTitle', label: 'Heading (new line = line break)', type: 'textarea' },
+      { name: 'appsText', label: 'Intro Text', type: 'textarea' },
+      { name: 'applications', label: 'Application', type: 'repeater', repeaterFields: [
+        { name: 'tag', label: 'Tag', type: 'text' },
+        { name: 'title', label: 'Title', type: 'text' },
+        { name: 'text', label: 'Text', type: 'textarea' },
+        { name: 'items', label: 'Items (comma separated)', type: 'text' },
+      ]},
+
+      { name: 'secProfiles', label: 'Channel Profiles', type: 'section' },
+      { name: 'profiles', label: 'Profile', type: 'repeater', repeaterFields: [
+        { name: 'label', label: 'Label', type: 'text' },
+        { name: 'size', label: 'Size', type: 'text' },
+        { name: 'note', label: 'Note', type: 'text' },
+        { name: 'configuration', label: 'Configuration', type: 'text' },
+        { name: 'thickness', label: 'Thickness', type: 'text' },
+        { name: 'lengths', label: 'Lengths', type: 'text' },
+        { name: 'selectionBasis', label: 'Selection Basis', type: 'text' },
+      ]},
+      { name: 'specNote', label: 'Note Under Table', type: 'textarea' },
+      { name: 'specLinkText', label: 'Brief Link Text', type: 'text' },
+
+      { name: 'secEng', label: 'Engineering First (dark section)', type: 'section' },
+      { name: 'engEyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'engTitle', label: 'Heading (new line = line break)', type: 'textarea' },
+      { name: 'engText', label: 'Text', type: 'textarea' },
+      { name: 'engButtonText', label: 'Button Text (scrolls to brief)', type: 'text' },
+      { name: 'engItems', label: 'Item', type: 'repeater', repeaterFields: [
+        { name: 'title', label: 'Title', type: 'text' },
+        { name: 'text', label: 'Text', type: 'textarea' },
+      ]},
+
+      { name: 'secBrief', label: 'Project Brief', type: 'section' },
+      { name: 'briefEyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'briefTitle', label: 'Heading (new line = line break)', type: 'textarea' },
+      { name: 'briefText', label: 'Text', type: 'textarea' },
+      { name: 'briefSmallText', label: 'Small Print', type: 'text' },
+      { name: 'briefDownloadText', label: 'Download Button Text', type: 'text' },
+      { name: 'briefEmailText', label: 'Email Link Text', type: 'text' },
+      { name: 'briefEmail', label: 'Send Briefs To (blank = Top Bar email)', type: 'email' },
+      { name: 'briefFileHeading', label: 'Downloaded File Heading', type: 'text' },
+
+      { name: 'secFaq', label: 'Specification Questions', type: 'section' },
+      { name: 'faqHeading', label: 'Heading', type: 'text' },
+      { name: 'faqs', label: 'Question', type: 'repeater', repeaterFields: [
+        { name: 'question', label: 'Question', type: 'text' },
+        { name: 'answer', label: 'Answer', type: 'textarea' },
+      ]},
+
+      { name: 'secHome', label: 'Home Page Section (under Our Capabilities)', type: 'section' },
+      { name: 'homeEyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'homeTitle', label: 'Heading', type: 'text' },
+      { name: 'homeText', label: 'Text', type: 'textarea' },
+      { name: 'homeButtonText', label: 'Button Text', type: 'text' },
     ],
   },
   about: {

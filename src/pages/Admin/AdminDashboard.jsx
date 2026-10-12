@@ -6,13 +6,12 @@ import { MODULE_ICONS } from '../../config/adminIcons'
 const AdminDashboard = () => {
   const { user } = useAuth()
 
-  const hiddenModules = ['industries', 'capabilities', 'categories', 'heroSlides', 'about', 'faq', 'footer']
+  const hiddenModules = ['capabilities', 'categories', 'heroSlides', 'about', 'faq', 'footer']
 
   const modules = [
     ...Object.entries(ADMIN_MODULES)
       .filter(([key]) => !hiddenModules.includes(key))
       .map(([key, mod]) => ({ key, label: mod.label, to: `/admin/${key}`, icon: MODULE_ICONS[key] })),
-    { key: 'industries', label: 'Industries', to: '/admin/industries', icon: MODULE_ICONS.industries },
     { key: 'capabilities', label: 'Capabilities', to: '/admin/capabilities', icon: MODULE_ICONS.capabilities },
     { key: 'products', label: 'Categories & Products', to: '/admin/products', icon: MODULE_ICONS.products },
     { key: 'heroSlides', label: 'Hero Slides', to: '/admin/heroSlides', icon: MODULE_ICONS.heroSlides },

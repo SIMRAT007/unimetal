@@ -70,6 +70,8 @@ const FieldRenderer = ({ field, value, onChange }) => {
   const commonProps = { name, placeholder }
 
   switch (type) {
+    case 'section':
+      return <h3 className="form-section-heading">{label}</h3>
     case 'text':
     case 'email':
     case 'tel':

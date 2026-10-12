@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye } from 'lucide-react'
+import { Eye, ImageOff } from 'lucide-react'
 import { stripTags } from '../lib/sanitizeHtml'
 import { getDocById } from '../lib/cms'
+import { productPath, useDuplicateSlugs } from '../lib/productLinks'
 import { useEffect, useState } from 'react'
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate()
+  const duplicateSlugs = useDuplicateSlugs()
   const image = product.images?.[0] || product.image || ''
   const [categoryName, setCategoryName] = useState(product.category || 'General')
 
@@ -33,10 +35,15 @@ const ProductCard = ({ product }) => {
     : 0
 
   return (
-    <Link to={`/product/${product.slug || product.id}`} className="product-card">
+    <Link to={productPath(product, duplicateSlugs)} className="product-card">
       <div className="product-image">
         {hasDiscount && <span className="product-badge">{discountPercent}% Off</span>}
-        {image ? <img src={image} alt={product.name} /> : <span className="product-no-image">No image</span>}
+        {image ? <img src={image} alt={product.name} /> : (
+          <span className="product-no-image">
+            <ImageOff size={28} strokeWidth={1.5} />
+            Image coming soon
+          </span>
+        )}
       </div>
       <div className="product-body">
         <div className="product-category">{categoryName}</div>

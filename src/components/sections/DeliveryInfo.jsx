@@ -1,5 +1,5 @@
 const DeliveryInfo = () => (
-  <section className="delivery-info section">
+  <section id="delivery" className="delivery-info section">
     <div className="container">
       <h2 className="delivery-info-title">Delivery Information</h2>
       <div className="delivery-info-body">

@@ -242,6 +242,21 @@
   margin-bottom: 1.1rem;
 }
 
+.form-section-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+}
+
+.form-section-heading:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 .form-field label {
   display: block;
   font-weight: 500;

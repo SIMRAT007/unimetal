@@ -1,22 +1,18 @@
 import { Link } from 'react-router-dom'
 import { COLLECTIONS } from '../../config/collections'
-import { useCollection, useSingleton } from '../../hooks/useCms'
+import { DATA_CENTER_PATH, defaultDataCenter } from '../../config/dataCenter'
+import { useSingleton } from '../../hooks/useCms'
 import { ArrowRight } from 'lucide-react'
-
-const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '').trim()
-
-const shortDesc = (html) => {
-  const text = stripHtml(html)
-  if (!text) return ''
-  return text.length > 80 ? `${text.slice(0, 80)}…` : text
-}
 
 const CapabilitiesSection = () => {
   const { data: section, loading: sectionLoading } = useSingleton(COLLECTIONS.capabilitiesSection)
-  const { data, loading } = useCollection(COLLECTIONS.capabilities, { activeOnly: true })
+  const { data: saved, loading: dcLoading } = useSingleton(COLLECTIONS.dataCenter)
 
-  if (sectionLoading || loading) return <div className="section-skeleton" />
+  if (sectionLoading || dcLoading) return <div className="section-skeleton" />
   if (section.active === false) return null
+
+  const dc = { ...defaultDataCenter, ...saved }
+  const points = Array.isArray(dc.stripItems) ? dc.stripItems : []
 
   return (
     <section id="capabilities" className="capabilities section">
@@ -25,22 +21,29 @@ const CapabilitiesSection = () => {
           {section.heading && <h2 className="capabilities-title">{section.heading}</h2>}
           {section.highlight && <h3 className="capabilities-highlight">{section.highlight}</h3>}
         </div>
-        <div className="capabilities-grid">
-          {data.map((cap) => (
-            <Link key={cap.id} to={`/capabilities/${cap.slug || cap.id}`} className="capability-card">
-              <div className="capability-card-media">
-                {cap.image && <img src={cap.image} alt={cap.heading || cap.name} />}
-              </div>
-              <div className="capability-card-body">
-                <h3>{cap.heading || cap.name}</h3>
-                <p className="capability-card-desc">{shortDesc(cap.description)}</p>
-                <div className="capability-card-arrow">
-                  <span>Learn more</span>
-                  <ArrowRight size={18} />
-                </div>
-              </div>
+
+        <div className="capability-feature">
+          <Link to={DATA_CENTER_PATH} className="capability-feature-media" aria-label={dc.homeTitle}>
+            {dc.heroImage && <img src={dc.heroImage} alt={dc.homeTitle} loading="lazy" />}
+          </Link>
+          <div className="capability-feature-body">
+            {dc.homeEyebrow && <span className="capability-feature-eyebrow">{dc.homeEyebrow}</span>}
+            <h3 className="capability-feature-title">{dc.homeTitle}</h3>
+            {dc.homeText && <p className="capability-feature-text">{dc.homeText}</p>}
+            {points.length > 0 && (
+              <ul className="capability-feature-points">
+                {points.map((point, i) => (
+                  <li key={point.id || i}>
+                    <span>{String(i + 1).padStart(2, '0')}</span>
+                    {point.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Link to={DATA_CENTER_PATH} className="capability-feature-btn">
+              {dc.homeButtonText || 'Learn more'} <ArrowRight size={18} />
             </Link>
-          ))}
+          </div>
         </div>
       </div>
     </section>

@@ -7,10 +7,9 @@ export const COLLECTIONS = {
   categories: 'categories',
   products: 'products',
   categoriesSection: 'config/categoriesSection',
-  industries: 'industries',
-  industriesSection: 'config/industriesSection',
   capabilities: 'capabilities',
   capabilitiesSection: 'config/capabilitiesSection',
+  dataCenter: 'config/dataCenter',
   about: 'config/about',
   stats: 'config/stats',
   contact: 'config/contact',
@@ -40,12 +39,6 @@ export const defaultCategoriesSection = {
   heading: 'Our Categories',
   highlight: 'Explore our wide range of metal products',
   subheading: '',
-}
-
-export const defaultIndustriesSection = {
-  active: true,
-  heading: 'Industry Experts',
-  highlight: 'We Got You Covered',
 }
 
 export const defaultCapabilitiesSection = {
@@ -91,7 +84,7 @@ export const defaultFaq = {
   bgColor: '',
   tag: 'Most asked queries',
   heading: 'Frequently asked questions',
-  subheading: 'Trusted in more than 100 countries and 5 million customers.',
+  subheading: 'Answers to common questions about ordering, delivery and choosing the right product.',
   items: [],
   ctaHeading: "Can't locate the answers you need?",
   ctaSubtext: "We're here to help with any questions you have!",
