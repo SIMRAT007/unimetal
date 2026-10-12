@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Star, ChevronDown, MessageCircle } from 'lucide-react'
@@ -11,6 +11,7 @@ import DeliveryInfo from '../components/sections/DeliveryInfo'
 const ProductDetail = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [product, setProduct] = useState(null)
   const [category, setCategory] = useState(null)
   const [related, setRelated] = useState([])
@@ -19,6 +20,10 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0)
 
   const productCode = product?.productCode || ''
+
+  const handleContactClick = () => {
+    navigate('/contact', { state: { product } })
+  }
 
   useEffect(() => {
     let mounted = true
@@ -54,11 +59,13 @@ const ProductDetail = () => {
   if (!product) return null
 
   const images = product.images || []
-  const hasPrice = product.price !== '' && product.price !== undefined && product.price !== null
-  const hasOriginalPrice = product.originalPrice !== '' && product.originalPrice !== undefined && product.originalPrice !== null
-  const hasDiscount = hasPrice && hasOriginalPrice && Number(product.originalPrice) > Number(product.price)
+  const priceNum = Number(product.price)
+  const originalPriceNum = Number(product.originalPrice)
+  const hasPrice = !isNaN(priceNum) && priceNum > 0
+  const hasOriginalPrice = !isNaN(originalPriceNum) && originalPriceNum > 0
+  const hasDiscount = hasPrice && hasOriginalPrice && originalPriceNum > priceNum
   const discountPercent = hasDiscount
-    ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
+    ? Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100)
     : 0
   const rating = Number(product.rating) || 0
 
@@ -107,10 +114,10 @@ const ProductDetail = () => {
                     <div className="product-main-image">
                       <img src={images[selectedImage]} alt={product.name} />
                     </div>
-                    <Link to="/contact" className="btn btn-primary product-contact-btn">
+                    <button onClick={handleContactClick} className="btn btn-primary product-contact-btn">
                       <MessageCircle size={18} />
                       Contact Us
-                    </Link>
+                    </button>
                   </div>
                 </>
               ) : (
@@ -133,11 +140,15 @@ const ProductDetail = () => {
               </div>
 
               <div className="product-info-meta">
-                {hasPrice && (
+                {hasPrice ? (
                   <div className="product-info-price">
-                    <span className="product-info-current-price">{product.price}</span>
-                    {hasOriginalPrice && <span className="product-info-original-price">{product.originalPrice}</span>}
+                    <span className="product-info-current-price">{priceNum}</span>
+                    {hasOriginalPrice && <span className="product-info-original-price">{originalPriceNum}</span>}
                     {hasDiscount && <span className="product-info-discount">{discountPercent}% off</span>}
+                  </div>
+                ) : (
+                  <div className="product-info-price">
+                    <span className="product-info-current-price quote-text" onClick={handleContactClick}>Request a quote</span>
                   </div>
                 )}
                 {rating > 0 && (
@@ -181,12 +192,12 @@ const ProductDetail = () => {
 
           {related.length > 0 && (
             <div className="related-products">
-              <h2>More in {category?.name}</h2>
+              <h2 style={{ paddingBottom: '2rem' }}>More in {category?.name}</h2>
               <div className="product-grid small">
                 {related.map((p) => (
                   <a href={`/product/${p.slug || p.id}`} key={p.id} className="product-card">
                     {p.images?.[0] && <img src={p.images[0]} alt={p.name} className="product-image" />}
-                    <h3>{p.name}</h3>
+                    <h3 style={{ padding: '1rem' }}>{p.name}</h3>
                   </a>
                 ))}
               </div>

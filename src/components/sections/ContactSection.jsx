@@ -5,7 +5,7 @@ import ContactForm from '../ContactForm'
 import PageLoader from '../PageLoader'
 import logo from '../../assets/logo.png'
 
-const ContactSection = () => {
+const ContactSection = ({ product }) => {
   const { data, loading } = useSingleton(COLLECTIONS.contact)
   const { data: nav, loading: navLoading } = useSingleton(COLLECTIONS.navbar)
 
@@ -77,7 +77,7 @@ const ContactSection = () => {
           <div className="contact-card contact-form-wrap">
             {data.formHeading && <h3>{data.formHeading}</h3>}
             {data.formDescription && <p className="contact-form-desc">{data.formDescription}</p>}
-            <ContactForm source="contact-section" />
+            <ContactForm source="contact-section" product={product} />
           </div>
 
           {data.map && (

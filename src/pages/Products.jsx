@@ -8,7 +8,7 @@ const Products = () => (
       <div className="container">
         <h2 className="section-title">All Products</h2>
         <p className="section-subtitle">Browse the complete Unimetal catalog.</p>
-        <ProductList />
+        <ProductList showFilters={true} />
       </div>
     </section>
     <ProductsCta />

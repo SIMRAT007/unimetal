@@ -1,22 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Send } from 'lucide-react'
 import { addItem } from '../lib/cms'
 import { useCollection } from '../hooks/useCms'
 import { COLLECTIONS } from '../config/collections'
 
-const ContactForm = ({ source = 'contact-page', defaultValues = {}, onSubmitted }) => {
+const ContactForm = ({ source = 'contact-page', defaultValues = {}, onSubmitted, product }) => {
   const { data: products } = useCollection(COLLECTIONS.products, { activeOnly: true })
   const [formData, setFormData] = useState({
     name: defaultValues.name || '',
     email: defaultValues.email || '',
     phone: defaultValues.phone || '',
     inquiryType: defaultValues.inquiryType || 'General Inquiry',
-    productId: defaultValues.productId || '',
-    subject: defaultValues.subject || '',
+    productId: defaultValues.productId || product?.id || '',
+    subject: defaultValues.subject || product?.name ? `Enquiry about ${product.name}` : '',
     message: defaultValues.message || '',
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  useEffect(() => {
+    if (product) {
+      setFormData((prev) => ({
+        ...prev,
+        productId: product.id,
+        subject: `Enquiry about ${product.name}`,
+      }))
+    }
+  }, [product])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -75,7 +85,7 @@ const ContactForm = ({ source = 'contact-page', defaultValues = {}, onSubmitted 
       <div className="contact-form-row">
         <label className="contact-field">
           <span>Phone Number *</span>
-          <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+91 98765 43210" required />
+          <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+44 20 7123 4567" required />
         </label>
         <label className="contact-field">
           <span>Inquiry Type</span>
